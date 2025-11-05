@@ -1,0 +1,63 @@
+<!-- src/app/login/login.component.html -->
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">Đăng nhập</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="nhập email..."
+          class="form-input"
+          [class.error]="email.invalid && email.touched">
+        <!-- <small class="error-text" *ngIf="email.invalid && email.touched">
+          Vui lòng nhập email hợp lệ
+        </small> -->
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <div class="password-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="nhập mật khẩu..."
+            class="form-input"
+            [class.error]="password.invalid && password.touched">
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="showPassword = !showPassword">
+            <span *ngIf="!showPassword">Mắt</span>
+            <span *ngIf="showPassword">Ẩn</span>
+          </button>
+        </div>
+        <small class="error-text" *ngIf="password.invalid && password.touched">
+          Mật khẩu phải có ít nhất 6 ký tự
+        </small>
+      </div>
+
+      <!-- Server Error -->
+      <div class="server-error" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="form.invalid || loading">
+        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="!loading">Đăng nhập</span>
+      </button>
+
+    </form>
+  </div>
+</div>
