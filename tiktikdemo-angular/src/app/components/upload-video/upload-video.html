@@ -1,0 +1,67 @@
+<!-- src/app/components/upload-video/upload-video.component.html -->
+<div class="upload-container">
+  <div class="upload-card">
+    <h2>Upload Video</h2>
+
+    <form nz-form>
+      <!-- Video -->
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">Video</nz-form-label>
+        <nz-upload
+          nzType="drag"
+          [nzBeforeUpload]="beforeUploadVideo"
+          [nzFileList]="[]"
+          [nzShowButton]="!videoFile"
+        >
+          <p class="ant-upload-drag-icon">
+            <span nz-icon nzType="inbox"></span>
+          </p>
+          <p class="ant-upload-text">Kéo thả video vào đây hoặc click để chọn</p>
+          <p class="ant-upload-hint">Tối đa 100MB, định dạng MP4</p>
+        </nz-upload>
+
+        <div *ngIf="videoPreviewUrl" class="preview">
+          <video [src]="videoPreviewUrl" controls style="width:100%; max-height:200px;"></video>
+        </div>
+      </nz-form-item>
+
+      <!-- Thumbnail -->
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">Ảnh Thumbnail</nz-form-label>
+        <nz-upload
+          nzType="drag"
+          [nzBeforeUpload]="beforeUploadThumbnail"
+          [nzFileList]="[]"
+          [nzShowButton]="!thumbnailFile"
+        >
+          <p class="ant-upload-drag-icon">
+            <span nz-icon nzType="picture"></span>
+          </p>
+          <p class="ant-upload-text">Kéo thả ảnh vào đây</p>
+          <p class="ant-upload-hint">JPG/PNG, tối đa 5MB</p>
+        </nz-upload>
+
+        <div *ngIf="thumbnailPreviewUrl" class="preview thumbnail">
+          <img [src]="thumbnailPreviewUrl" alt="Thumbnail" style="width:100%; max-height:150px; object-fit: cover;" />
+        </div>
+      </nz-form-item>
+
+      <!-- Description -->
+      <nz-form-item>
+        <nz-form-label>Mô tả</nz-form-label>
+        <textarea nz-input [(ngModel)]="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Nhập mô tả video..."></textarea>
+      </nz-form-item>
+
+      <!-- Progress -->
+      <nz-progress *ngIf="uploading" [nzPercent]="progress" [nzStatus]="progress < 100 ? 'active' : 'success'"></nz-progress>
+
+      <!-- Button -->
+      <div class="actions">
+        <button nz-button nzType="primary" (click)="upload()" [nzLoading]="uploading" [disabled]="!videoFile || !thumbnailFile">
+          Upload Video
+        </button>
+        <button nz-button (click)="resetForm()" [disabled]="uploading">Hủy</button>
+      </div>
+    </form>
+  </div>
+</div>

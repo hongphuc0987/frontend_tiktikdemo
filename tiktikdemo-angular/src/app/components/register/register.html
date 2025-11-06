@@ -1,0 +1,114 @@
+<!-- src/app/components/register/register.component.html -->
+<div class="register-container">
+  <div class="register-card">
+    <h2 class="title">Đăng ký tài khoản</h2>
+
+    <!-- Success Message -->
+    <div class="success-box" *ngIf="success">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      <span>Đăng ký thành công! Đang chuyển về đăng nhập...</span>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-box" *ngIf="error">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      <span>{{ error }}</span>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="register-form">
+
+      <!-- Họ tên -->
+      <div class="form-group">
+        <label>Họ và tên *</label>
+        <input type="text" formControlName="name" class="form-input"
+               [class.error]="f.name.invalid && f.name.touched"
+               placeholder="Nguyễn Văn A">
+        <small class="error-text" *ngIf="f.name.invalid && f.name.touched">
+          Tên phải có ít nhất 2 ký tự
+        </small>
+      </div>
+
+      <!-- Số điện thoại -->
+      <div class="form-group">
+        <label>Số điện thoại *</label>
+        <input type="tel" formControlName="phoneNumber" class="form-input"
+               [class.error]="f.phoneNumber.invalid && f.phoneNumber.touched"
+               placeholder="0901234567">
+        <small class="error-text" *ngIf="f.phoneNumber.invalid && f.phoneNumber.touched">
+          Số điện thoại không hợp lệ (10-11 số)
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" formControlName="email" class="form-input"
+               [class.error]="f.email.invalid && f.email.touched"
+               placeholder="you@example.com">
+        <small class="error-text" *ngIf="f.email.invalid && f.email.touched">
+          Email không hợp lệ
+        </small>
+      </div>
+
+      <!-- Giới tính -->
+      <div class="form-group">
+        <label>Giới tính *</label>
+        <select formControlName="gender" class="form-input">
+          <option value="female">Nữ</option>
+          <option value="male">Nam</option>
+          <option value="other">Khác</option>
+        </select>
+      </div>
+
+      <!-- Mật khẩu -->
+      <div class="form-group">
+        <label>Mật khẩu *</label>
+        <input type="password" formControlName="password" class="form-input"
+               [class.error]="f.password.invalid && f.password.touched"
+               placeholder="••••••••">
+        <small class="error-text" *ngIf="f.password.invalid && f.password.touched">
+          Mật khẩu ít nhất 6 ký tự
+        </small>
+      </div>
+
+      <!-- Xác nhận mật khẩu -->
+      <div class="form-group">
+        <label>Xác nhận mật khẩu *</label>
+        <input type="password" formControlName="confirmPassword" class="form-input"
+               [class.error]="form.errors?.['mismatch'] && f.confirmPassword.touched"
+               placeholder="••••••••">
+        <small class="error-text" *ngIf="form.errors?.['mismatch'] && f.confirmPassword.touched">
+          Mật khẩu không khớp
+        </small>
+      </div>
+
+      <!-- Địa chỉ -->
+      <div class="form-group">
+        <label>Địa chỉ</label>
+        <input type="text" formControlName="address" class="form-input"
+               placeholder="123 Đường ABC, Quận 1">
+      </div>
+
+      <!-- Ngày sinh -->
+      <div class="form-group">
+        <label>Ngày sinh *</label>
+        <input type="date" formControlName="dob" class="form-input"
+               [class.error]="f.dob.invalid && f.dob.touched">
+        <small class="error-text" *ngIf="f.dob.invalid && f.dob.touched">
+          Vui lòng chọn ngày sinh
+        </small>
+      </div>
+
+      <!-- Nút Đăng ký -->
+      <button type="submit" class="submit-btn" [disabled]="form.invalid || loading">
+        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="!loading">Đăng ký ngay</span>
+      </button>
+
+      <!-- Link đăng nhập -->
+      <p class="login-link">
+        Đã có tài khoản? <a routerLink="/login">Đăng nhập ngay</a>
+      </p>
+    </form>
+  </div>
+</div>

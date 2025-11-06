@@ -12,6 +12,14 @@ export const routes: Routes = [
     path: 'home',
     loadComponent: () => import('./components/home/home').then(h => h.HomeComponent)
   },
+  {
+  path: 'register',
+  loadComponent: () => import('./components/register/register').then(m => m.RegisterComponent)
+  },
+  {
+  path: 'verify',
+  loadComponent: () => import('./components/verify/verify').then(m => m.VerifyEmailComponent)
+  },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 ];

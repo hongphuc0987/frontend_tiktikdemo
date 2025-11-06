@@ -1,9 +1,10 @@
 // src/app/services/auth.service.ts
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, tap } from 'rxjs';
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router, RouterLink } from '@angular/router'; // ← Thêm Router
+import { BehaviorSubject, Observable, throwError, catchError, tap } from 'rxjs';
+import { environment } from '../../environment/environment';
+// ĐƯA INTERFACE RA NGOÀI CLASS
 interface LoginRequest {
   email: string;
   password: string;
@@ -22,46 +23,80 @@ interface LoginResponse {
   };
 }
 
+interface RegisterRequest {
+  name: string;
+  phoneNumber: string;
+  email: string;
+  gender: 'male' | 'female' | 'other';
+  password: string;
+  address?: string;
+  dob: string;
+}
+
+interface RegisterResponse {
+  code: number;
+  message: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:8080/api/v1/users/signin'; // ← ĐÚNG
+  private apiUrl = `${environment.apiUrl}/users`;
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
+  // ==================== LOGIN ====================
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.apiUrl, credentials).pipe( // ← Không /login
+    return this.http.post<LoginResponse>(`${this.apiUrl}/signin`, credentials).pipe(
       tap(res => {
         if (res.code === 200) {
-          // Lưu token
           localStorage.setItem('token', res.data.accessToken);
           localStorage.setItem('refreshToken', res.data.refreshToken);
 
-          // Lưu user
           const user = {
             id: res.data.userId,
             name: res.data.fullName,
-            email: res.data.fullName, // backend dùng fullName = email
+            email: res.data.fullName,
             role: res.data.roleName
           };
           localStorage.setItem('user', JSON.stringify(user));
           this.userSubject.next(user);
-
-          // Chuyển hướng
           this.router.navigate(['/home']);
         }
       }),
-      catchError(err => {
-        const msg = err.error?.message?.includes('credentials')
-          ? 'Email hoặc mật khẩu không đúng!'
-          : 'Lỗi kết nối. Vui lòng thử lại.';
-        throw new Error(msg);
+       catchError((error: HttpErrorResponse) => {
+      // LẤY NGUYÊN MESSAGE TỪ BACKEND
+      const backendMessage = error.error?.message;
+
+      // Nếu có message → dùng nó
+      // Nếu không → fallback
+      const msg = backendMessage || 'Đã có lỗi xảy ra. Vui lòng thử lại!';
+
+      // Throw lại để component bắt
+      return throwError(() => new Error(msg));
+    })
+  );
+}
+
+  // ==================== REGISTER ====================
+  register(data: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${this.apiUrl}/create`, data).pipe(
+      tap(res => {
+        if (res.code === 200 || res.message?.toLowerCase().includes('success')) {
+          // Không lưu token
+        }
+      }),
+       catchError((error: HttpErrorResponse) => {
+        // Trả về message từ backend trực tiếp
+        const msg = error.error?.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+        return throwError(() => msg);
       })
     );
   }
 
+  // ==================== UTILS ====================
   logout() {
     localStorage.clear();
     this.userSubject.next(null);
@@ -79,4 +114,7 @@ export class AuthService {
   getRefreshToken(): string | null {
     return localStorage.getItem('refreshToken');
   }
+  navigateToLogin() {
+  this.router.navigate(['/login']);
+}
 }

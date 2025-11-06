@@ -133,6 +133,66 @@
   margin-right: 8px;
 }
 
+/* src/app/login/login.component.css */
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.register-link .register-text {
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.register-link .register-text:hover {
+  color: #5a6fd8;
+  text-decoration: underline;
+}
+
+/* src/app/login/login.component.css */
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.toggle-password:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.toggle-password .icon {
+  width: 20px;
+  height: 20px;
+  fill: #666;
+  transition: fill 0.2s;
+}
+
+.toggle-password:hover .icon {
+  fill: #333;
+}
+
+/* Đảm bảo input không bị che */
+.form-input {
+  padding-right: 44px !important; /* Để chừa chỗ cho icon */
+}
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

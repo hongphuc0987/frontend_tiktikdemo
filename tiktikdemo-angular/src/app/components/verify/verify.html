@@ -1,0 +1,32 @@
+<!-- src/app/components/verify-email/verify-email.component.html -->
+<div class="verify-container">
+  <div class="verify-card">
+
+    <!-- Loading -->
+    <div class="status-box" *ngIf="status === 'loading'">
+      <div class="spinner"></div>
+      <p>Đang xác thực email của bạn...</p>
+    </div>
+
+    <!-- Success -->
+    <div class="status-box success" *ngIf="status === 'success'">
+      <svg class="icon success-icon" viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+      </svg>
+      <h2>Xác thực thành công!</h2>
+      <p>{{ message }}</p>
+      <button class="action-btn" (click)="goToLogin()">Đi đến Đăng nhập</button>
+    </div>
+
+    <!-- Error -->
+    <div class="status-box error" *ngIf="status === 'error'">
+      <svg class="icon error-icon" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+      <h2>Xác thực thất bại</h2>
+      <p>{{ message }}</p>
+      <button class="action-btn" (click)="goToLogin()">Quay lại Đăng nhập</button>
+    </div>
+
+  </div>
+</div>
